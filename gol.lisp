@@ -8,8 +8,7 @@
 	(setf (blt:cell-char (realpart k) (imagpart k)) (code-char (+ v 31))
 	      (gethash k new) (if (member (complex c v) '(2 3 #C(3 1))) 0 1)))
 	  finally (blt:refresh))
-    (unless (blt:has-input-p) 
-      (dagame new))))
+    (unless (blt:has-input-p) (dagame new))))
 
 (defun game-of-life (seed dimx dimy &optional (hash (make-hash-table)))
   (blt:with-terminal 
