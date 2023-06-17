@@ -22,5 +22,3 @@
 		(let ((coord (complex x y)))
 		  (setf (gethash coord hash)
 			(if (member coord seed) 0 1))))))))
-
-
