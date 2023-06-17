@@ -1,18 +1,15 @@
-(defun dagame (oldhash)
+(defun dagame (old)
   (blt:clear)
-  (let ((newhash (make-hash-table)))
-    (loop for k being the hash-keys in oldhash using (hash-value v)
-	  for count = 0 do
-	(when (zerop v) 
-	  (setf (blt:cell-char (realpart k) (imagpart k)) #\x))
-	(dolist (mod '(#C( 0 -1) #C(0  1) #C(-1 0) #C(1 0)
-		       #C(-1 -1) #C(1 -1) #C(-1 1) #C(1 1)))
-	  (incf count (- 1 (gethash (+ mod k) oldhash 1))))
-	(setf (gethash k newhash)
-	      (if (member (complex count v) '(2 3 #C(3 1))) 0 1))
-	finally (blt:refresh))
+  (let ((new (make-hash-table)))
+    (loop for k being the hash-keys in old using (hash-value v) do
+      (let ((c (reduce #'+ (mapcar #'(lambda (n) (- 1 (gethash (+ k n) old 1)))
+				   '(#C( 0 -1) #C(0  1) #C(-1 0) #C(1 0)
+				     #C(-1 -1) #C(1 -1) #C(-1 1) #C(1 1))))))
+	(setf (blt:cell-char (realpart k) (imagpart k)) (code-char (+ v 31))
+	      (gethash k new) (if (member (complex c v) '(2 3 #C(3 1))) 0 1)))
+	  finally (blt:refresh))
     (unless (blt:has-input-p) 
-      (dagame newhash))))
+      (dagame new))))
 
 (defun game-of-life (seed dimx dimy &optional (hash (make-hash-table)))
   (blt:with-terminal 
