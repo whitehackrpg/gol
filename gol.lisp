@@ -11,7 +11,7 @@
 	    (setf (gethash coord new) 0
 		  (blt:cell-char (realpart coord) (imagpart coord)) 
 		  (code-char 31))))))
-  (blt:refresh)
+    (blt:refresh)
     (unless (and (blt:has-input-p) (= (blt:read) 41)) (dagame new))))
 
 (defun game-of-life (seed dimx dimy &optional (hash (make-hash-table)))
